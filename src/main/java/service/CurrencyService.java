@@ -29,20 +29,21 @@ public class CurrencyService {
     private Map<LocalDate, List<CurrencyRate>> map = new HashMap<>();
 
     public Map<LocalDate, List<CurrencyRate>> updateCurrencyRates(JProgressBar progressBar) {
-
-        for (int i = 0; i < 30; i++) {
-            LocalDate date = LocalDate.now().minusDays(i);
-            List<CurrencyRate> currencyRates = downloadCurrency(date);
-            if (currencyRates == null || currencyRates.isEmpty()) {
-                log.warning("updateCurrencyRates: currency rates are not exists on date " + date);
+        if(map.isEmpty()) {
+            for (int i = 0; i < 30; i++) {
+                LocalDate date = LocalDate.now().minusDays(i);
+                List<CurrencyRate> currencyRates = downloadCurrency(date);
+                if (currencyRates == null || currencyRates.isEmpty()) {
+                    log.warning("updateCurrencyRates: currency rates are not exists on date " + date);
+                }
+                LocalDate fetchedDate = currencyRates.get(0).getDate();
+                if (fetchedDate.isEqual(date)) {
+                    map.put(date, currencyRates);
+                    log.info("updateCurrencyRates: currency rates updated on date " + date);
+                }
+                progressBar.setValue(progressBar.getValue() + 1);
+                progressBar.update(progressBar.getGraphics());
             }
-            LocalDate fetchedDate = currencyRates.get(0).getDate();
-            if (fetchedDate.isEqual(date)) {
-                map.put(date, currencyRates);
-                log.info("updateCurrencyRates: currency rates updated on date " + date);
-            }
-            progressBar.setValue(progressBar.getValue() + 1);
-            progressBar.update(progressBar.getGraphics());
         }
         return map;
     }

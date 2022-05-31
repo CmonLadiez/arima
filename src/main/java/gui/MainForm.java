@@ -42,6 +42,10 @@ public class MainForm extends JFrame {
                 progressBar.setValue(0);
                 progressBar.update(progressBar.getGraphics());
                 currencyService.updateCurrencyRates(progressBar);
+                if (progressBar.getValue() < progressBar.getMaximum() - 1) {
+                    progressBar.setValue((progressBar.getMaximum() - 1));
+                    progressBar.update(progressBar.getGraphics());
+                }
                 List<CurrencyRate> rates = currencyService.getAllCurrencyRatesByCurrency(Currency.valueOf(
                         Objects.requireNonNull(currencyBox.getSelectedItem()).toString().substring(2)));
                 ArimaForecastWithAic forecastResult = ARIMA_HELPER.autoForecastArima(

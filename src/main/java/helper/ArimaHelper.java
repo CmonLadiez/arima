@@ -13,8 +13,8 @@ public class ArimaHelper {
     public ArimaForecastWithAic autoForecastArima(final double[] data, final int forecastSize) {
         try {
             ArimaForecastWithAic currentModel = null;
-            for (int p = 0; p <= 3; p++) {
-                for (int q = 0; q <= 3; q++) {
+            for (int p = 0; p <= 4; p++) {
+                for (int q = 0; q <= 4; q++) {
                     currentModel = forecast(currentModel, data, forecastSize, p, q);
                 }
             }
