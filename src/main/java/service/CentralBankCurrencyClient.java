@@ -12,13 +12,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
 
 public class CentralBankCurrencyClient {
-
-    Logger log = Logger.getLogger(Main.class.getName());
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
     private final RestTemplate restTemplate = new RestTemplate();
-
     private final String urlPrefix = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=";
+    Logger log = Logger.getLogger(Main.class.getName());
 
     public CentralBankCurrencyClient() {
     }

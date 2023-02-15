@@ -11,7 +11,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -23,14 +22,21 @@ import java.util.logging.Logger;
 import static domain.Currency.findExceptRub;
 
 public class CurrencyService {
-    Logger log = Logger.getLogger(Main.class.getName());
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private final CentralBankCurrencyClient client = new CentralBankCurrencyClient();
-    private Map<LocalDate, List<CurrencyRate>> map = new HashMap<>();
+    private final Map<LocalDate, List<CurrencyRate>> map = new HashMap<>();
+    Logger log = Logger.getLogger(Main.class.getName());
 
-    public Map<LocalDate, List<CurrencyRate>> updateCurrencyRates(JProgressBar progressBar) {
-        if(map.isEmpty()) {
-            for (int i = 0; i < 30; i++) {
+    private static double toDouble(Element element) {
+        return Double.parseDouble(
+                element.getElementsByTagName("Value").item(0).getTextContent()
+                        .replace(",", ".")
+        );
+    }
+
+    public Map<LocalDate, List<CurrencyRate>> updateCurrencyRates() {
+        if (map.isEmpty()) {
+            for (int i = 0; i < 100; i++) {
                 LocalDate date = LocalDate.now().minusDays(i);
                 List<CurrencyRate> currencyRates = downloadCurrency(date);
                 if (currencyRates == null || currencyRates.isEmpty()) {
@@ -41,8 +47,6 @@ public class CurrencyService {
                     map.put(date, currencyRates);
                     log.info("updateCurrencyRates: currency rates updated on date " + date);
                 }
-                progressBar.setValue(progressBar.getValue() + 1);
-                progressBar.update(progressBar.getGraphics());
             }
         }
         return map;
@@ -92,13 +96,6 @@ public class CurrencyService {
         String fetchedDateString = doc.getElementsByTagName("ValCurs").item(0)
                 .getAttributes().getNamedItem("Date").getTextContent();
         return LocalDate.parse(fetchedDateString, dateFormatter);
-    }
-
-    private static double toDouble(Element element) {
-        return Double.parseDouble(
-                element.getElementsByTagName("Value").item(0).getTextContent()
-                        .replace(",", ".")
-        );
     }
 
     public List<CurrencyRate> getAllCurrencyRatesByCurrency(Currency cur) {

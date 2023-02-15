@@ -9,7 +9,7 @@ public class FileHelper {
 
     public static DocumentBuilder prepareXmlParser() {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // protects from XXE attacks
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
         DocumentBuilder builder;
         try {
