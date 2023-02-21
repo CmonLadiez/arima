@@ -34,7 +34,7 @@ public class CurrencyService {
         );
     }
 
-    public Map<LocalDate, List<CurrencyRate>> updateCurrencyRates() {
+    public void updateCurrencyRates() {
         if (map.isEmpty()) {
             for (int i = 0; i < 100; i++) {
                 LocalDate date = LocalDate.now().minusDays(i);
@@ -49,7 +49,6 @@ public class CurrencyService {
                 }
             }
         }
-        return map;
     }
 
     private @Nullable List<CurrencyRate> downloadCurrency(LocalDate demandDate) {

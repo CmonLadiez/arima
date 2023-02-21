@@ -12,6 +12,8 @@ import smile.timeseries.BoxTest;
 import javax.swing.*;
 import java.awt.*;
 
+import static com.github.signaflo.math.operations.DoubleFunctions.round;
+
 @Getter
 public class ChartsForm extends JFrame {
     private JPanel mainPanel;
@@ -47,7 +49,8 @@ public class ChartsForm extends JFrame {
                 StatsHelper.hipoTest(pValueAdf));
         updateLabel(ljungLabel, "Residuals Ljung–Box test: %s", true,
                 StatsHelper.hipoTest(pValueLjung));
-        arimaLabel.setText(String.format("<html>Best model: %s <br/>AIC: %s</html>\n ", series.getArima().order(), series.getArima().aic()));
+        arimaLabel.setText(String.format("<html>Best model: %s <br/>AIC: %s</html>\n ", series.getArima().order(),
+                round(series.getArima().aic(), 2)));
         this.pack();
 
         modelPlotButton.addActionListener(actionEvent -> {
@@ -79,7 +82,7 @@ public class ChartsForm extends JFrame {
             if (series.getStationingType() == StationingType.BOXED_COXED) {
                 Chart.plotLikeHistogram(series.getArima().predictionErrors().backTransform(series.getD()), "Residuals", "residuals");
             } else
-                Chart.plotLikeHistogram(series.getArima().predictionErrors(), "123", "values");
+                Chart.plotLikeHistogram(series.getArima().predictionErrors(), "Residuals", "values");
         });
     }
 

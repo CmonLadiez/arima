@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static com.github.signaflo.math.operations.DoubleFunctions.round;
+
 @Getter
 public class MainForm extends JFrame {
     private final CurrencyService currencyService = new CurrencyService();
@@ -42,14 +44,14 @@ public class MainForm extends JFrame {
                 updateLoadingLabel("Status: Building Arima models (2/2)", Color.BLACK);
                 StationarySeries series = arimaService.calculateOptimalModel(rates);
                 System.out.println(series.getArima().order());
-                System.out.println("MSE: " + Arrays.stream(series.getArima().stdErrors())
+                System.out.println("MSE: " + round(Arrays.stream(series.getArima().stdErrors())
                         .boxed().mapToDouble(error -> error * error)
-                        .sum());
+                        .sum(), 2));
                 System.out.println(series.getArima().forecast(2));
 
                 buttonsSwitch(true);
                 updateLoadingLabel("Status: Finished", Color.GREEN);
-                ChartsForm chartsForm = new ChartsForm(series);
+                new ChartsForm(series);
             } catch (RuntimeException e) {
                 JOptionPane.showMessageDialog(null,
                         String.format("Error: %s", e.getMessage()));
