@@ -46,7 +46,7 @@ public class MainForm extends JFrame {
                 System.out.println(series.getArima().order());
                 System.out.println("MSE: " + round(Arrays.stream(series.getArima().stdErrors())
                         .boxed().mapToDouble(error -> error * error)
-                        .sum(), 2));
+                        .sum() / series.getArima().stdErrors().length, 2));
                 System.out.println(series.getArima().forecast(2));
 
                 buttonsSwitch(true);
